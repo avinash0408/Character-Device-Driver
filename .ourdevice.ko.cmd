@@ -1,1 +1,0 @@
-cmd_/home/bordia98/osproject/ourdevice.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/bordia98/osproject/ourdevice.ko /home/bordia98/osproject/ourdevice.o /home/bordia98/osproject/ourdevice.mod.o

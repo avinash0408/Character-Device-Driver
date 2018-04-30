@@ -5,23 +5,23 @@
 #include<linux/semaphore.h> /* this is for the semaphore*/
 #include<linux/uaccess.h> /*this is for copy_user vice vers*/
 
-MODULE_LICENSE("GPL");
+MODULE_LICENSE("GPL");    // This is specify that the code is open source
 
-int chardev_init(void);
-void chardev_exit(void);
-static int device_open(struct inode *, struct file *);
-static int device_close(struct inode *, struct file *);
-static ssize_t device_read(struct file *, char *, size_t, loff_t *);
+int chardev_init(void);   // initialising the device driver
+void chardev_exit(void);  // releasing the device driver
+static int device_open(struct inode *, struct file *);    // function for opening the device driver
+static int device_close(struct inode *, struct file *);   // function for closing the device driver
+static ssize_t device_read(struct file *, char *, size_t, loff_t *);            // return signed integer value as this is ssize_t so it will take care of 32 / 64 bit system we don't need to take care of that
 static ssize_t device_write(struct file *, const char *, size_t, loff_t *);
 
 /*new code*/
 #define BUFFER_SIZE 1024
-static char device_buffer[BUFFER_SIZE];
-struct semaphore sem;
-struct cdev *mcdev; /*this is the name of my char driver that i will be registering*/
-int major_number; /* will store the major number extracted by dev_t*/
-int ret; /*used to return values*/
-dev_t dev_num; /*will hold the major number that the kernel gives*/
+static char device_buffer[BUFFER_SIZE];         // to store the string that we enter
+struct semaphore sem;                           // for locking and unlocking the device when in used
+struct cdev *mcdev;                             /*this is the name of my char driver that i will be registering*/
+int major_number;                               /* will store the major number extracted by dev_t*/
+int ret;                                        /*used to return values*/
+dev_t dev_num;                                    /*will hold the major number that the kernel gives*/
 
 #define DEVICENAME "ourdevice"
 
@@ -82,7 +82,6 @@ struct file_operations fops = { /* these are the file operations provided by our
     .write = device_write, /*to write to the device*/
     .read = device_read, /*to read the device*/
     .release = device_close, /*to close the device*/
-  //  .llseek = device_lseek
 };
 
 
@@ -128,9 +127,8 @@ void chardev_exit(void)
     printk(KERN_ALERT " ourdevice : character driver is exiting\n");
 }
 
-MODULE_AUTHOR("A G MEGHARAJ(agmegharaj@gmail.com)");
+MODULE_AUTHOR("Our society");
 MODULE_DESCRIPTION("A BASIC CHAR DRIVER");
-//MODULE_LICENCE("GPL");
 
 module_init(chardev_init);
 module_exit(chardev_exit);
